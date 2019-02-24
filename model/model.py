@@ -3,7 +3,7 @@ from keras.models import Sequential
 from keras.layers import Dense, Activation, Flatten, Conv2D
 
 
-class Model:
+class CNN:
     def __init__(self, config):
         self.config = config
     
@@ -18,3 +18,4 @@ class Model:
         ])
         model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['acc'])
         return model
+

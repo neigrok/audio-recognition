@@ -1,12 +1,14 @@
 from keras.utils import Sequence
+import numpy as np
 
 
 class Batcher(Sequence):
     def __init__(self, x, y, batch_size=40):
+        assert len(x) == len(y), "X and Y have different lengths"
         self.batch_size = batch_size
-        self.x = np.array([prepare_shape(f['log_mel'], config)  for f in data])
-        self.y = np.array([f['type'] for f in data])
-        self.indexes = np.arange(len(data))
+        self.x = np.array(x)
+        self.y = np.array(y)
+        self.indexes = np.arange(len(x))
         
     def __len__(self):
         return int(np.ceil(len(self.x) / self.batch_size))

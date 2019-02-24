@@ -1,3 +1,7 @@
+import librosa
+import numpy as np
+
+
 class FeatureExtractor:
     def __init__(self, config):
         self.config = config
@@ -20,8 +24,8 @@ class FeatureExtractor:
         log_mels = librosa.core.power_to_db(mels, ref=np.max)
         return log_mels
     
-    def reshape(arr):
-        shaped = np.copy(x)
+    def reshape(self, arr):
+        shaped = np.copy(arr)
         N = self.config.shape[1]
         while shaped.shape[1] < N:
             shaped = np.hstack((shaped, shaped))
