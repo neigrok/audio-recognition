@@ -7,22 +7,24 @@ class FeatureExtractor:
         self.config = config
         
     def preprocess(self, y, sr):
-        return y, sr
+        times = librosa.effects.split(y, top_db=30)
+        ys = [y[start:end] for start, end in times]
+        ys = filter(lambda x: len(x) > self.config.frame_size, ys)
+        return ys, sr
         
-    def get_mels(self, filepath, preprocess=True):
-        y, sr = librosa.load(filepath, sr=self.config.sample_rate)
-        if preprocess:
-            y, sr = self.preprocess(y, sr)
-        
-        mels = librosa.feature.melspectrogram(
-            y,
-            n_fft=self.config.frame_size,
-            hop_length=self.config.hop,
-            n_mels=self.config.mels_count,
-            fmax=sr//2
-        )
-        log_mels = librosa.core.power_to_db(mels, ref=np.max)
-        return log_mels
+    def get_mels(self, filepath):
+        orig_y, sr = librosa.load(filepath, sr=self.config.sample_rate)
+        ys, sr = self.preprocess(orig_y, sr)
+        for y in ys:
+            mels = librosa.feature.melspectrogram(
+                y,
+                n_fft=self.config.frame_size,
+                hop_length=self.config.hop,
+                n_mels=self.config.mels_count,
+                fmax=sr//2
+            )
+            log_mels = librosa.core.power_to_db(mels, ref=np.max)
+            yield log_mels
     
     def reshape(self, arr):
         shaped = np.copy(arr)

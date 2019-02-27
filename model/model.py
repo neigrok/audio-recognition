@@ -9,10 +9,10 @@ class CNN:
     
     def get_model(self):
         model = Sequential([
-            Conv2D(16, kernel_size=(4, 4), input_shape=self.config.shape),
-            Conv2D(16, kernel_size=(4, 4)),
+            Conv2D(32, kernel_size=(2, 2), input_shape=self.config.shape),
+            Conv2D(32, kernel_size=(3, 1)),
             Flatten(),
-            Dense(16),
+            Dense(32),
             Dense(8),
             Activation('softmax'),
         ])
